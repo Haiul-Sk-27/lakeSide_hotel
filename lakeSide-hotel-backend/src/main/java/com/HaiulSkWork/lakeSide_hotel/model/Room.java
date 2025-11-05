@@ -16,6 +16,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class Room {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
