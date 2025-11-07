@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface RoomRepository extends JpaRepository<Room,Long> {
 
-    @Query("SELECT DISTINIC r.roomType FROM Room r")
+    @Query("SELECT DISTINCT r.roomType FROM Room r")
     List<String> findDistinicRoomtypes();
 }

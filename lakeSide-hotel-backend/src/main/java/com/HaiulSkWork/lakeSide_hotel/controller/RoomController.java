@@ -40,22 +40,27 @@ public class RoomController {
             return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/room/types")
+    @GetMapping("/rooms/types")
     public List<String> getRooms(){
         return roomService.getAllRoomTypes();
     }
 
+    @GetMapping("/rooms/all")
     public ResponseEntity<List<RoomResponse>> getAllRooms() throws SQLException, ResourceNotFoundException {
         List<Room> rooms = roomService.getAllRooms();
         List<RoomResponse> roomResponses = new ArrayList<>();
-        for(Room room : rooms){
+
+        for (Room room : rooms) {
             byte[] photoBytes = roomService.getRoomPhotoByRoomId(room.getId());
-            if(photoBytes != null && photoBytes.length>0){
-                String  base64Photo = Base64.encodeBase64String(photoBytes);
-                RoomResponse roomResponse = getRoomResponse(room);
-                roomResponse.setPhoto(base64Photo);
-                roomResponses.add(roomResponse);
+            String base64Photo = null;
+
+            if (photoBytes != null && photoBytes.length > 0) {
+                base64Photo = Base64.encodeBase64String(photoBytes);
             }
+
+            RoomResponse roomResponse = getRoomResponse(room);
+            roomResponse.setPhoto(base64Photo);
+            roomResponses.add(roomResponse);
         }
 
         return ResponseEntity.ok(roomResponses);
@@ -63,27 +68,39 @@ public class RoomController {
 
     private RoomResponse getRoomResponse(Room room) {
         List<BookedRoom> bookings = getAllBookingsByRoomId(room.getId());
-        List<BookingResponse> bookingInfo = bookings
-                .stream()
-                .map(booking -> new BookingResponse(booking.getBookingId(),
+        if (bookings == null) {
+            bookings = new ArrayList<>();
+        }
+
+        List<BookingResponse> bookingInfo = bookings.stream()
+                .map(booking -> new BookingResponse(
+                        booking.getBookingId(),
                         booking.getCheckInDate(),
-                        booking.getCheckOutDate(),booking.getBookingConfirmationCode())).toList();
+                        booking.getCheckOutDate(),
+                        booking.getBookingConfirmationCode()
+                ))
+                .toList();
 
         byte[] photoBytes = null;
         Blob photoBlob = room.getPhoto();
-        if(photoBlob != null){
-            try{
-                photoBytes = photoBlob.getBytes(1,(int) photoBlob.length());
-
-            }catch (SQLException e){
-                throw new PhotoRetrivalException("Error retriving photo");
+        if (photoBlob != null) {
+            try {
+                photoBytes = photoBlob.getBytes(1, (int) photoBlob.length());
+            } catch (SQLException e) {
+                throw new PhotoRetrivalException("Error retrieving photo");
             }
         }
-        return new RoomResponse(room.getId(),
+
+        return new RoomResponse(
+                room.getId(),
                 room.getRoomType(),
                 room.getRoomPrice(),
-                room.isBooked(),photoBytes, bookingInfo);
-    }`
+                room.isBooked(),
+                photoBytes,
+                bookingInfo
+        );
+    }
+
 
     private List<BookedRoom> getAllBookingsByRoomId(Long roomId) {
         return bookingsService.getAllBookingsByRoomId(roomId);
