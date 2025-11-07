@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { addRoom } from '../utils/ApiFunctions';
+import { RoomTypesSelector } from '../common/RoomTypesSelector';
 
 const AddRoom = () => {
 
@@ -10,7 +11,7 @@ const AddRoom = () => {
     })
 
     const[imagePreview,setImagePreview] = useState("");
-    const [successMessage, setSuccessMessage] = useStateI();
+    const [successMessage, setSuccessMessage] = useState();
     const [errorMessage,setErrorMessage] = useState();
     
     const handleRoomInputChange = (e) =>{
@@ -20,7 +21,7 @@ const AddRoom = () => {
             if(!isNaN(value)){
                 
             }
-            value.parseInt(value)
+            value = parseInt(value);
         }else{
             value=""
         }
@@ -34,7 +35,7 @@ const AddRoom = () => {
         setImagePreview(URL.createObjectURL(selectedImage))
     }
 
-    const handleSubmit = (e) =>  {
+    const handleSubmit = async (e) =>  {
         e.preventDefault();
         try{
             const success = await addRoom(newRoom.photo,newRoom.roomType,newRoom.price)
@@ -64,7 +65,9 @@ const AddRoom = () => {
                         Room Type
                     </label>
 
-                    <div></div>
+                    <div>
+                        <RoomTypesSelector handleRoomInputChange={handleRoomInputChange} newRoom={newRoom}/>
+                    </div>
                 </div>
 
                 <div className='mb-3'>
@@ -72,7 +75,7 @@ const AddRoom = () => {
                         Room Price
                     </label>
 
-                    <input className='form-control' required id="roomPrice" type='number' name='roomPrice' value={newRoom.roomPrice} onChange={handleRoomInputChange}/>
+                    <input className='form-control' required id="roomPrice" type="number"  name='roomPrice' value={newRoom.roomPrice} onChange={handleRoomInputChange}/>
 
                 </div>
 
