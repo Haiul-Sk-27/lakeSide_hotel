@@ -1,4 +1,13 @@
 package com.HaiulSkWork.lakeSide_hotel.repository;
 
-public interface RoomRepository {
+import com.HaiulSkWork.lakeSide_hotel.model.Room;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
+
+public interface RoomRepository extends JpaRepository<Room,Long> {
+
+    @Query("SELECT DISTINIC r.roomType FROM Room r")
+    List<String> findDistinicRoomtypes();
 }

@@ -1,0 +1,13 @@
+package com.HaiulSkWork.lakeSide_hotel.service;
+
+import com.HaiulSkWork.lakeSide_hotel.model.BookedRoom;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class BookingsService {
+    public List<BookedRoom> getAllBookingsByRoomId(Long roomId) {
+        return null;
+    }
+}
