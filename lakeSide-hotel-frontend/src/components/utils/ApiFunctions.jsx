@@ -25,6 +25,7 @@ export async function getRoomTypes(){
     try{
 
         const response = await api.get("/rooms/room-types")
+        console.log("rooms response.",response)
         return response.data;
 
     }catch(error){

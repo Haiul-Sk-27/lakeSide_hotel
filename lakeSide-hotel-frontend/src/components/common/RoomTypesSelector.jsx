@@ -5,13 +5,17 @@ export const RoomTypesSelector = ({ handleRoomInputChange, newRoom }) => {
   const [roomTypes, setRoomTypes] = useState([]);
   const [showNewRoomTypesInput, setShowNewRoomTypesInput] = useState(false);
   const [newRoomType, setNewRoomType] = useState("");
-  
+
   useEffect(() => {
     const fetchRoomTypes = async () => {
       try {
         const data = await getRoomTypes();
+        // Ensure all items have the correct shape
         if (Array.isArray(data)) {
-          setRoomTypes(data);
+          const normalized = data.map((type) =>
+            typeof type === "string" ? { roomType: type } : type
+          );
+          setRoomTypes(normalized);
         }
       } catch (error) {
         console.error("Error fetching room types:", error);
@@ -25,8 +29,11 @@ export const RoomTypesSelector = ({ handleRoomInputChange, newRoom }) => {
   };
 
   const handleAddNewRoomType = () => {
-    if (newRoomType.trim() !== "") {
-      setRoomTypes((prev) => [...prev, newRoomType]);
+    if (
+      newRoomType.trim() !== "" &&
+      !roomTypes.some((t) => t.roomType === newRoomType)
+    ) {
+      setRoomTypes((prev) => [...prev, { roomType: newRoomType }]);
       setShowNewRoomTypesInput(false);
       setNewRoomType("");
 
@@ -52,9 +59,9 @@ export const RoomTypesSelector = ({ handleRoomInputChange, newRoom }) => {
         className="form-select"
       >
         <option value="">Select a room type</option>
-        {roomTypes.map((type, index) => (
-          <option key={index} value={type}>
-            {type}
+        {roomTypes.map((type,index) => (
+          <option key={index} value={type.roomType}>
+            {type.roomType}
           </option>
         ))}
         <option value="Add New">➕ Add New</option>
@@ -73,6 +80,10 @@ export const RoomTypesSelector = ({ handleRoomInputChange, newRoom }) => {
             className="btn btn-outline-primary"
             type="button"
             onClick={handleAddNewRoomType}
+            disabled={
+              newRoomType.trim() === "" ||
+              roomTypes.some((t) => t.roomType === newRoomType)
+            }
           >
             Add
           </button>
