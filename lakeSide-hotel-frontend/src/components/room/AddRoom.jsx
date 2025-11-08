@@ -13,7 +13,6 @@ const AddRoom = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  // ✅ Fixed input handler
   const handleRoomInputChange = (e) => {
     const { name, value } = e.target;
     setNewRoom((prevRoom) => ({
@@ -31,7 +30,6 @@ const AddRoom = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // ✅ fixed roomPrice variable
       const success = await addRoom(
         newRoom.photo,
         newRoom.roomType,
@@ -43,9 +41,8 @@ const AddRoom = () => {
         setErrorMessage("");
         setNewRoom({ photo: null, roomType: "", roomPrice: "" });
         setImagePreview("");
-      } else {
-        setErrorMessage("Error adding room");
       }
+      return true
     } catch (error) {
       setErrorMessage(error.message);
     }

@@ -10,7 +10,6 @@ export const RoomTypesSelector = ({ handleRoomInputChange, newRoom }) => {
     const fetchRoomTypes = async () => {
       try {
         const data = await getRoomTypes();
-        // Ensure all items have the correct shape
         if (Array.isArray(data)) {
           const normalized = data.map((type) =>
             typeof type === "string" ? { roomType: type } : type
