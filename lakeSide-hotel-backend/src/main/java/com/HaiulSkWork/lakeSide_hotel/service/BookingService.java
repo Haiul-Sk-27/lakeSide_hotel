@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class BookingsService {
+public class BookingService {
     public List<BookedRoom> getAllBookingsByRoomId(Long roomId) {
         return null;
     }
