@@ -9,6 +9,7 @@ import com.HaiulSkWork.lakeSide_hotel.response.RoomResponse;
 import com.HaiulSkWork.lakeSide_hotel.service.BookingService;
 import com.HaiulSkWork.lakeSide_hotel.service.IRoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.apache.commons.codec.binary.Base64;
@@ -36,17 +37,18 @@ public class RoomController {
             @RequestParam("photo") MultipartFile photo,
             @RequestParam("roomType") String roomType,
             @RequestParam("roomPrice") BigDecimal roomPrice) throws SQLException {
-            Room savedRoom = roomService.addNewRoom(photo,roomType,roomPrice);
+        Room savedRoom = roomService.addNewRoom(photo,roomType,roomPrice);
 
-            RoomResponse response = new RoomResponse(savedRoom.getId(),savedRoom.getRoomType(),savedRoom.getRoomPrice());
-            return ResponseEntity.ok(response);
+        RoomResponse response = new RoomResponse(savedRoom.getId(),savedRoom.getRoomType(),savedRoom.getRoomPrice());
+        return ResponseEntity.ok(response);
     }
-    @GetMapping("/all")
+
+    @GetMapping("room-types")
     public List<String> getRooms(){
         return roomService.getAllRoomTypes();
     }
 
-    @GetMapping("/room-types")
+    @GetMapping("/all-rooms")
     public ResponseEntity<List<RoomResponse>> getAllRooms() throws SQLException, ResourceNotFoundException {
         List<Room> rooms = roomService.getAllRooms();
         List<RoomResponse> roomResponses = new ArrayList<>();
@@ -66,9 +68,18 @@ public class RoomController {
 
         return ResponseEntity.ok(roomResponses);
     }
+    @DeleteMapping("/delete/room/{roomId}")
+    public ResponseEntity<Void> deleteRoom(@PathVariable Long roomId){
+        roomService.deleteRoom(roomId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
     private RoomResponse getRoomResponse(Room room) {
         List<BookedRoom> bookings = getAllBookingsByRoomId(room.getId());
+
+        if (bookings == null) {
+            bookings = new ArrayList<>();
+        }
 
         List<BookingResponse> bookingInfo = bookings.stream()
                 .map(booking -> new BookingResponse(
@@ -86,18 +97,18 @@ public class RoomController {
             try {
                 photoBytes = photoBlob.getBytes(1, (int) photoBlob.length());
             } catch (SQLException e) {
-                throw new PhotoRetrivalException("Error retrieving photo", e);
+                throw new PhotoRetrivalException("Error retrieving photo");
             }
         }
 
         return new RoomResponse(
-                        room.getId(),
-                        room.getRoomType(),
-                        room.getRoomPrice(),
-                        room.getIsBooked(),
+                room.getId(),
+                room.getRoomType(),
+                room.getRoomPrice(),
+                room.isBooked(),
                 photoBytes,
                 bookingInfo
-                );
+        );
     }
 
 

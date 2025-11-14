@@ -47,12 +47,4 @@ public class Room {
         String bookingCode = RandomStringUtils.randomNumeric(10);
         booking.setBookingConfirmationCode(bookingCode);
     }
-
-    public boolean getIsBooked() {
-        return isBooked;
-    }
-
-    public void setIsBooked(boolean isBooked) {
-        this.isBooked = isBooked;
-    }
 }
