@@ -1,38 +1,50 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
-export const RoomFilter = ({data,serFiteredData}) => {
-    const [filter,setFilter] = useState("")
-    const handleSelectChenge = (e)=>{
-        const selectRoomType = e.target.value
+export const RoomFilter = ({ data, setFilteredData }) => {
+    const [filter, setFilter] = useState("");
 
-        setFilter(selectRoomType)
-        const filteredRooms = data.filter((room)=>room.roomtype.toLowerCase().includes(selectRoomType.toLowerCase()))
-        setFilteredData(filteredRooms)
-    }
+    const handleSelectChange = (e) => {
+        const selectedRoomType = e.target.value;
+        setFilter(selectedRoomType);
+
+        if (selectedRoomType === "") {
+            setFilteredData(data);
+            return;
+        }
+
+        const filteredRooms = data.filter((room) =>
+            room.roomType.toLowerCase().includes(selectedRoomType.toLowerCase())
+        );
+
+        setFilteredData(filteredRooms);
+    };
 
     const clearFilter = () => {
-        setFilter("")
-        setFilteredData(data)
-    }
+        setFilter("");
+        setFilteredData(data);
+    };
 
-    const roomTypes = ["",...new Set((room) => room.roomtype)]
-  return (
-    <div className='input-group mb-3'>
-        <span className='input-group-text'id="room-type-filter">Filter room by types</span>
-        <select className='form-select'
-        value={filter}
-        onChange={handleSelectChenge}>
+    const roomTypes = ["", ...new Set(data.map((room) => room.roomType))];
 
-            <option value={""}>select a room type to filter...</option>
-            {
-                roomTypes.map((type,index)=>(
-                    <option key={index} value={String(type)}>{String(type)}</option>
-                ))
-            }
+    return (
+        <div className='input-group mb-3'>
+            <span className='input-group-text' id="room-type-filter">Filter room by types</span>
 
-        </select>
+            <select
+                className='form-select'
+                value={filter}
+                onChange={handleSelectChange}
+            >
+                <option value={""}>Select a room type...</option>
 
-        <button className='btn btn-hotel' type='button' onClick={clearFilter}>clear Filter</button>
-    </div>
-  )
-}
+                {roomTypes.map((type, index) => (
+                    <option key={index} value={type}>{type}</option>
+                ))}
+            </select>
+
+            <button className='btn btn-hotel' type='button' onClick={clearFilter}>
+                Clear Filter
+            </button>
+        </div>
+    );
+};
