@@ -16,11 +16,14 @@ import org.apache.commons.codec.binary.Base64;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import javax.sql.rowset.serial.SerialBlob;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -72,6 +75,29 @@ public class RoomController {
     public ResponseEntity<Void> deleteRoom(@PathVariable Long roomId){
         roomService.deleteRoom(roomId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("update/{roomId}")
+    public ResponseEntity<RoomResponse> updateRoom(@PathVariable Long roomId,
+                                                   @RequestParam(required = false) String roomType,
+                                                   @RequestParam(required = false) BigDecimal roomPrice,
+                                                   @RequestParam(required = false) MultipartFile photo) throws SQLException, ResourceNotFoundException, IOException {
+        byte[] photoBytes = photo!=null && !photo.isEmpty()?
+                photo.getBytes():roomService.getRoomPhotoByRoomId(roomId);
+
+        Blob photoBlob = photoBytes != null && photoBytes.length > 0 ? new SerialBlob(photoBytes):null;
+        Room theRoom = roomService.updateRoom(roomId,roomType,roomPrice,photoBytes);
+        theRoom.setPhoto(photoBlob);
+        RoomResponse roomResponse = getRoomResponse(theRoom);
+        return ResponseEntity.ok(roomResponse);
+    }
+    @GetMapping("/room/{roomId}")
+    public ResponseEntity<Optional<RoomResponse>> getRoomId(@PathVariable Long roomId) throws ResourceNotFoundException {
+        Optional<Room> theRoom = roomService.getRoomById(roomId);
+        return theRoom.map(room ->{
+            RoomResponse roomResponse = getRoomResponse(room);
+            return ResponseEntity.ok(Optional.of(roomResponse));
+        }).orElseThrow(() -> new ResourceNotFoundException("Room not found"));
     }
 
     private RoomResponse getRoomResponse(Room room) {
