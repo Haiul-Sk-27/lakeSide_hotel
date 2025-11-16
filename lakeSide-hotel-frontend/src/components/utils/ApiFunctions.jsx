@@ -62,10 +62,10 @@ export async function updateRoom(roomId,roomData){
     const formData = new FormData();
     formData.append("roomType",roomData.roomType);
     formData.append("roomPrice",roomData.roomPrice);
-    formData.append("roomPhoto",roomData.roomPhoto);
-    formData.append("roomType",roomData.roomType);
+    formData.append("photo", roomData.photo);
 
-    const response = await api.put(`rooms/apdate/${roomId}`)
+    const response = await api.put(`rooms/update/${roomId}`)
+    console.log("roomupdate respose:",response)
     return response;
 }
 
@@ -80,3 +80,25 @@ export async function getRoomById(roomId){
         throw new Error(`Error fetching room ${error.message}`)
     }
 }
+
+// //this function update a rooom
+// export async function updateRoom(roomId,roomData){
+//     const formData = new FormData();
+
+//     formData.append("roomType",room.roomType)
+//     formData.append("roomPrice",room.roomPrice)
+//     formData.append("photo",room.photo)
+    
+//     const response = await api.get(`/rooms/update/${roomId}`);
+//     return response
+// }
+
+// //this function get a rooom by the id
+// export async function getRoomById(roomId){
+//     try{
+//         const result = await api.get(`/room/room/${roomId}`)
+//         return result.data
+//     }catch(eror){
+//         throw new Error(`Error fetching room${error.message}`)
+//     }
+// }
