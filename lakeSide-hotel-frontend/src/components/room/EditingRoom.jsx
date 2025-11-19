@@ -22,10 +22,6 @@ const EditingRoom = () => {
       try {
         const roomData = await getRoomById(roomId);
         setRoom(roomData);
-        console.log("photo:", roomData.photo);
-
-
-        // If API returns a URL for photo
         if (roomData.photo) {
           setImagePreview(`data:image/jpeg;base64,${roomData.photo}`);
         }
@@ -50,27 +46,20 @@ const EditingRoom = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      // If your API requires FormData:
-      const formData = new FormData();
-      formData.append("photo", room.photo);
-      formData.append("roomType", room.roomType);
-      formData.append("roomPrice", room.roomPrice);
+  try {
+    const success = await updateRoom(roomId, room);
 
-      const success = await updateRoom(roomId, formData);
-      console.log("update details:",room)
-
-      if (success) {
-        setSuccessMessage("Room updated successfully");
-        setErrorMessage("");
-      }
-
-    } catch (error) {
-      setErrorMessage(error.message);
+    if (success) {
+      setSuccessMessage("Room updated successfully");
+      setErrorMessage("");
     }
-  };
+  } catch (error) {
+    setErrorMessage(error.message);
+  }
+};
+
 
   return (
     <section className="container mt-5 mb-5">
