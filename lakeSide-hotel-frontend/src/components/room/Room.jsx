@@ -1,50 +1,82 @@
 import React, { useEffect, useState } from 'react'
 import RoomCard from './RoomCard';
+import { Col, Container, Row } from 'react-bootstrap';
+import RoomPaginator from '../common/RoomPaginator';
+import { RoomFilter } from '../common/RoomFilter';
+import { getAllRooms } from '../utils/ApiFunctions';
 
 const Room = () => {
-    const [data,setData] = useState([]);
-    const[error,setError] = useState(null);
-    const[isLoading,setIsLoading] = useState(false);
-    const[currentPage,setCurrnetPage] = useState(1);
-    const[roomsPerPage] = useState(6);
-    const[filteredData,setFilteredData] = useState([id:""]);
+    const [data, setData] = useState([]);
+    const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [currentPage, setCurrnetPage] = useState(1);
+    const [roomsPerPage] = useState(6);
+    const [filteredData, setFilteredData] = useState([{ id: "" }]);
 
-    useEffect(()=>{
+    useEffect(() => {
         setIsLoading(true)
-        getAllRooms().then((data)=>{
+        getAllRooms().then((data) => {
             setData(data)
             setFilteredData(data)
             setIsLoading(false)
-        }).catch((error)=>{
+        }).catch((error) => {
             setError(error.message)
             setIsLoading(false)
         })
-    },[])
+    }, [])
 
-    if(isLoading){
+    if (isLoading) {
         return <div>Loading rooms....</div>
     }
 
-    if(error){
+    if (error) {
         return <div className='text-danger'>Error:{error}</div>
     }
 
-    const hadlePageChange = (pageNumber) =>{
+    const hadlePageChange = (pageNumber) => {
         setCurrnetPage(pageNumber);
     }
 
-    const totalPages = Math.ceil(filteredData.length/roomsPerPage)
+    const totalPages = Math.ceil(filteredData.length / roomsPerPage)
 
-    const renderRooms = ()=>{
-        const startIndex = (currentPage-1) * roomsPerPage;
+    const renderRooms = () => {
+        const startIndex = (currentPage - 1) * roomsPerPage;
         const endIndex = startIndex + roomsPerPage;
         return filteredData
-        .slice(startIndex,endIndex)
-        .map((room)=><RoomCard key={room.id} room={room}/>)
+            .slice(startIndex, endIndex)
+            .map((room) => <RoomCard key={room.id} room={room} />)
     }
-  return (
-    <div>Room</div>
-  )
+    return (
+        <Container>
+            <Row>
+                <Col md={6} className='mb-3 mb-md-0'>
+                    <RoomFilter data={data} setFilteredData={setFilteredData} />
+                </Col>
+
+                <Col md={6} className='d-flex align-items-center justify-center-end'>
+                    <RoomPaginator
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={hadlePageChange}
+                    />
+                </Col>
+            </Row>
+
+            <Row>
+                {renderRooms()}
+            </Row>
+
+            <Row>
+                <Col md={6} className='d-flex align-items-center justify-center-end'>
+                    <RoomPaginator
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={hadlePageChange}
+                    />
+                </Col>
+            </Row>
+        </Container>
+    )
 }
 
 export default Room

@@ -1,13 +1,15 @@
 import React from 'react'
 import { Card, Col } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 
-const RoomCard = () => {
+const RoomCard = (room) => {
+  
   return (
     <Col className='mb-4' xs={12}>
     <Card>
         <Card.Body className='d-flex flex-wrap align-items-center'>
             <div className='flex-shrink-0 mr-3 mb-3 mb-md-0'>
-                <Card.Img variant='top' src={`data:image/png;base64,${room.photo}`}
+                <Card.Img variant='top' src={`data:image/png;base64${room.photo}`}
                 alt="Room Photo"
                 style={{width:"100%", maxwidth: "200px", height: "auto"}}/>
             </div>
