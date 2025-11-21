@@ -1,70 +1,110 @@
 import React from 'react'
-import { Col, Container, Row } from 'react-bootstrap'
-import { FaClock, FaCocktail, FaTshirt, FaWifi } from 'react-icons/fa'
-import RoomCard from '../room/RoomCard'
+import { Card, Col, Container, Row } from 'react-bootstrap'
+import { FaClock, FaCocktail, FaParking, FaTshirt, FaUtensils, FaWifi } from 'react-icons/fa'
 
 const HotelService = () => {
-  return (
-    <>
-    <Container className='mb-2 '>
-        <Header title={"Our Service"}/>
-            <Row>
-                <h4 className='text-center'>
-                    Service at <span className='hotel-color'>lakeSide -</span>
-                    <span className='gap-2'>
-                        <FaClock/> -24-Hour Front Desk
-                    </span>
-                </h4>
-            </Row>
-            <hr/>
-            <Row xs={1} md={2} lg={3} className='g-4 mt-2'>
-                <Col>
-                    <Card>
-                        <Card.body>
-                            <Card.title className="hotel-color">
-                                <FaWifi/> Wifi
-                            </Card.title>
-                            <Card.Text>Stay connect with high-speed internet access.</Card.Text>
-                        </Card.body>
-                    </Card>
-                </Col>
+    return (
+        <>
+            <Container className='mb-2'>
+                <h2 className="text-center">Our Service</h2>
 
-                <Col>
-                    <Card>
-                        <Card.body>
-                            <Card.title className="hotel-color">
-                                <FaWifi/> Breakfast
-                            </Card.title>
-                            <Card.Text>Start your day with a delicious  Breakfast buffet</Card.Text>
-                        </Card.body>
-                    </Card>
-                </Col>
+                <Row>
+                    <h4 className='text-center'>
+                        Service at <span className='hotel-color'>lakeSide - </span>
+                        <span className='gap-2'>
+                            <FaClock /> 24-Hour Front Desk
+                        </span>
+                    </h4>
+                </Row>
 
-                <Col>
-                    <Card>
-                        <Card.body>
-                            <Card.title className="hotel-color">
-                                <FaTshirt/>Laundry
-                            </Card.title>
-                            <Card.Text>Keep your clouthes clean and fresh with our laundry service.</Card.Text>
-                        </Card.body>
-                    </Card>
-                </Col>
+                <hr />
 
-                <Col>
-                    <Card>
-                        <Card.body>
-                            <Card.title className="hotel-color">
-                                <FaCocktail/>Mini-bar
-                            </Card.title>
-                            <Card.Text>Enjoy a refreshing drink or snack from our in-room mini-bar.</Card.Text>
-                        </Card.body>
-                    </Card>
-                </Col>
-            </Row>
-    </Container>
-    </>
-  )
+                <Row xs={1} md={2} lg={3} className='g-4 mt-2'>
+                    
+                    <Col>
+                        <Card>
+                            <Card.Body>
+                                <Card.Title className="hotel-color">
+                                    <FaWifi /> Wifi
+                                </Card.Title>
+                                <Card.Text>
+                                    Stay connected with high-speed internet access.
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+
+                    <Col>
+                        <Card>
+                            <Card.Body>
+                                <Card.Title className="hotel-color">
+                                    <FaUtensils /> Breakfast
+                                </Card.Title>
+                                <Card.Text>
+                                    Start your day with a delicious breakfast buffet.
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+
+                    <Col>
+                        <Card>
+                            <Card.Body>
+                                <Card.Title className="hotel-color">
+                                    <FaTshirt /> Laundry
+                                </Card.Title>
+                                <Card.Text>
+                                    Keep your clothes clean and fresh with our laundry service.
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+
+                    <Col>
+                        <Card>
+                            <Card.Body>
+                                <Card.Title className="hotel-color">
+                                    <FaCocktail /> Mini-bar
+                                </Card.Title>
+                                <Card.Text>
+                                    Enjoy a refreshing drink or snack from our in-room mini-bar.
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+
+                    <Col>
+                        <Card>
+                            <Card.Body>
+                                <Card.Title className="hotel-color">
+                                    <FaParking /> Parking
+                                </Card.Title>
+                                <Card.Text>
+                                    Park conveniently in our on-site parking lot.
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+
+                    <Col>
+                        <Card>
+                            <Card.Body>
+                                <Card.Title className="hotel-color">
+                                    <FaCocktail /> Air Conditioning
+                                </Card.Title>
+                                <Card.Text>
+                                    Stay cool and comfortable with our air conditioning.
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+
+                </Row>
+            </Container>
+
+            <hr />
+        </>
+    )
 }
 
 export default HotelService
